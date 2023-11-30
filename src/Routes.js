@@ -1,4 +1,10 @@
-const { addData, deleteData, searchBooks, allData } = require("./Functions");
+const {
+  addData,
+  deleteData,
+  searchBooks,
+  allData,
+  validasiData,
+} = require("./Functions");
 module.exports = [
   {
     method: "GET",
@@ -8,17 +14,11 @@ module.exports = [
 
       if (Object.keys(req.query).length > 0) {
         if ("finished" in req.query) {
-          hasil =
-            req.query.finished == 1
-              ? searchBooks("finished", 1)
-              : searchBooks("finished", 0);
+          hasil = searchBooks("finished", req.query.finished);
         } else if ("reading" in req.query) {
-          hasil =
-            req.query.reading == 1
-              ? searchBooks("reading", 1)
-              : searchBooks("reading", 0);
-        } else if ("nama" in req.query) {
-          hasil = searchBooks("nama", req.query.nama);
+          hasil = searchBooks("reading", req.query.reading);
+        } else if ("name" in req.query) {
+          hasil = searchBooks("name", req.query.name.toLowerCase());
         }
         if (hasil != "gaada") {
           return h
@@ -113,6 +113,37 @@ module.exports = [
           message: "Buku gagal dihapus. Id tidak ditemukan",
         })
         .code(404)
+        .message("Bad Request");
+    },
+  },
+  {
+    method: "PUT",
+    path: "/books/{booksId}",
+    handler: (req, h) => {
+      let hasil = validasiData(req.params.booksId, req.payload);
+      if (hasil == "Berhasil") {
+        return h
+          .response({
+            status: "success",
+            message: "Buku berhasil diperbarui",
+          })
+          .code(200)
+          .message("OK");
+      } else if (hasil == "Gagal memperbarui buku. Id tidak ditemukan") {
+        return h
+          .response({
+            status: "fail",
+            message: hasil,
+          })
+          .code(404)
+          .message("Bad Request");
+      }
+      return h
+        .response({
+          status: "fail",
+          message: hasil,
+        })
+        .code(400)
         .message("Bad Request");
     },
   },
