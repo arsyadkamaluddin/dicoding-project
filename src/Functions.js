@@ -38,7 +38,7 @@ function updateData(bookId, data) {
         publisher: data.publisher,
         pageCount: data.pageCount,
         readPage: data.readPage,
-        finished: data.readPage == data.pageCount,
+        finished: data.readPage === data.pageCount,
         reading: data.reading,
         insertedAt: data.insertedAt,
         updatedAt: new Date().toISOString(),
@@ -56,7 +56,7 @@ function addData(data) {
     publisher: data.publisher,
     pageCount: data.pageCount,
     readPage: data.readPage,
-    finished: data.readPage == data.pageCount,
+    finished: data.readPage === data.pageCount,
     reading: data.reading,
     insertedAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -64,7 +64,7 @@ function addData(data) {
   if (data.readPage > data.pageCount) {
     return "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount";
   }
-  if (data.name == "" || !data.name) {
+  if (data.name === "" || !data.name) {
     return "Gagal menambahkan buku. Mohon isi nama buku";
   }
   Data.push(newData);
@@ -73,40 +73,40 @@ function addData(data) {
 function deleteData(bookId) {
   let hasil = 0;
   Data = Data.filter((e) => {
-    if (e.id == bookId) {
+    if (e.id === bookId) {
       hasil++;
     }
-    return e.id != bookId;
+    return e.id !== bookId;
   });
-  if (hasil == 1) {
+  if (hasil === 1) {
     return Data;
   } else {
     return "gagal";
   }
 }
 function searchBooks(method, val) {
-  if (method == "id") {
+  if (method === "id") {
     let hasil = Data.filter((e) => {
-      return e.id == val;
+      return e.id === val;
     });
-    return hasil.length == 0 ? "gaada" : hasil;
-  } else if (method == "name") {
+    return hasil.length === 0 ? "gaada" : hasil;
+  } else if (method === "name") {
     let hasil = Data.filter((e) => {
       return e.name.toLowerCase().includes(val);
     });
-    return hasil.length == 0 ? "gaada" : hasil;
-  } else if (method == "finished") {
+    return hasil.length === 0 ? "gaada" : hasil;
+  } else if (method === "finished") {
     if (val < 2) {
       let hasil = Data.filter((e) => {
-        return e.finished == (val == 1) ? true : false;
+        return e.finished === (val === 1) ? true : false;
       });
       return hasil;
     }
     return Data;
-  } else if (method == "reading") {
+  } else if (method === "reading") {
     if (val < 2) {
       let hasil = Data.filter((e) => {
-        return e.reading == (val == 1) ? true : false;
+        return e.reading === (val === 1) ? true : false;
       });
       return hasil;
     }

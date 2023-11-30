@@ -5,6 +5,7 @@ const {
   allData,
   validasiData,
 } = require("./Functions");
+
 module.exports = [
   {
     method: "GET",
@@ -20,7 +21,7 @@ module.exports = [
         } else if ("name" in req.query) {
           hasil = searchBooks("name", req.query.name.toLowerCase());
         }
-        if (hasil != "gaada") {
+        if (hasil !== "gaada") {
           return h
             .response({
               status: "success",
@@ -47,7 +48,7 @@ module.exports = [
     path: "/books/{booksId}",
 
     handler: (req, h) => {
-      let hasil = searchBooks("id", req.params.booksId);
+      const hasil = searchBooks("id", req.params.booksId);
       if (hasil == "gaada") {
         return h
           .response({
@@ -71,8 +72,8 @@ module.exports = [
     method: "POST",
     path: "/books",
     handler: (req, h) => {
-      let panjang = allData().length;
-      let response = addData(req.payload);
+      const panjang = allData().length;
+      const response = addData(req.payload);
       if (response == "sukses") {
         return h
           .response({
@@ -83,23 +84,22 @@ module.exports = [
             },
           })
           .code(201);
-      } else {
-        return h
-          .response({
-            status: "fail",
-            message: response,
-          })
-          .code(400)
-          .message("Bad Request");
       }
+      return h
+        .response({
+          status: "fail",
+          message: response,
+        })
+        .code(400)
+        .message("Bad Request");
     },
   },
   {
     method: "DELETE",
     path: "/books/{booksid}",
     handler: (req, h) => {
-      let data = deleteData(req.params.booksid);
-      if (data != "gagal") {
+      const data = deleteData(req.params.booksid);
+      if (data !== "gagal") {
         return h
           .response({
             status: "success",
@@ -120,7 +120,7 @@ module.exports = [
     method: "PUT",
     path: "/books/{booksId}",
     handler: (req, h) => {
-      let hasil = validasiData(req.params.booksId, req.payload);
+      const hasil = validasiData(req.params.booksId, req.payload);
       if (hasil == "Berhasil") {
         return h
           .response({
